@@ -109,11 +109,22 @@ void get_mpu_data(double *mpu_current_data)
     /*Filter*/
     mpu_current_data[ROLL] = 0.98 * (mpu_current_data[ROLL] + roll_gyro) + 0.02 * (roll_accel);
     mpu_current_data[PITCH] = 0.98 * (mpu_current_data[PITCH] + pitch_gyro) + 0.02 * (pitch_accel);
-    double yaw_accel = atan2((sin(mpu_current_data[ROLL]) * cos(mpu_current_data[PITCH]) * x_accel + sin(mpu_current_data[PITCH]) * y_accel + cos(mpu_current_data[ROLL]) * cos(mpu_current_data[PITCH]) * z_accel), sqrt(pow(sin(mpu_current_data[ROLL]) * sin(mpu_current_data[PITCH]) * x_accel - cos(mpu_current_data[ROLL]) * sin(mpu_current_data[PITCH]) * z_accel, 2) + pow(cos(mpu_current_data[PITCH]) * x_accel, 2))) - 1;
+    double yaw_accel = atan2((sin(mpu_current_data[ROLL]) * cos(mpu_current_data[PITCH]) * x_accel + sin(mpu_current_data[PITCH]) 
+      * y_accel + cos(mpu_current_data[ROLL]) * cos(mpu_current_data[PITCH]) * z_accel), sqrt(pow(sin(mpu_current_data[ROLL]) * 
+      sin(mpu_current_data[PITCH]) * x_accel - cos(mpu_current_data[ROLL]) * sin(mpu_current_data[PITCH]) * z_accel, 2) + 
+      pow(cos(mpu_current_data[PITCH]) * x_accel, 2))) - 1;
     mpu_current_data[YAW] = 0.98 * (mpu_current_data[YAW] + yaw_gyro) + 0.02 * (yaw_accel);
 }
 
 /*TODO: Temperature*/
 double get_temp()
 {
+  Wire.beginTransmission(MPU_ADDR);
+  Wire.write(0x41);
+  Wire.endTransmission(false);
+  Wire.requestFrom(MPU_ADDR, 2);
+  uint16_t raw_temp = Wire.read() << 8 | Wire.read();
+  /*Since LSB is 340/C, divide raw by that. It also has an offset of 35, so add to it*/
+  double calib_temp = (raw_temp/340) + 35;
+  return calib_temp;
 }

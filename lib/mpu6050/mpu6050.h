@@ -7,5 +7,6 @@
 /*Function Prototypes*/
 void init_mpu_gyro();
 void get_mpu_data(double *mpu_current_data);
+double get_temp();
 
 #endif

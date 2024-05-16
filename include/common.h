@@ -26,6 +26,7 @@ struct Drone_Data_Message {
   byte batteryLevel;
   byte location;
   byte speed;
+  byte altitude;
 };
 
 /*MPU Address Table*/

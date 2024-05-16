@@ -85,10 +85,13 @@ void loop() {
     /*TODO: Add send data to controller -> Data needs to be serialized into
             a buffer before it can be assigned to the byte*/
     gps.encode(gps_serial.read());
-    tx_msg.location = gps.location;
-    tx_msg.speed = gps.speed;
+    tx_msg.gpsLatitude = gps.location.lat();
+    tx_msg.gpsLongitude = gps.location.lng();
+    tx_msg.speed = gps.speed.mps();
+    tx_msg.altitude = gps.altitude.meters();
     delay(1000);
   }
+  tx_msg.temp = get_temp();
   //pid_motors(set_points, esc_fl, esc_fr, esc_rl, esc_rr);
   /*TODO: Change to Microsecond pulses*/
 

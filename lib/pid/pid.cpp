@@ -8,7 +8,6 @@
 void get_setpoints(double *set_point, Controller_Data_Message *msgbuf)
 {
     set_point[YAW] = msgbuf->j1PotX - 128;
-    Serial.println(set_point[YAW]);
     set_point[ROLL] = msgbuf->j2PotX - 128;
     set_point[PITCH] = msgbuf->j2PotY - 128;
     set_point[THRUST] = msgbuf->j1PotY - 128;  
@@ -59,11 +58,6 @@ void pid_motors(double *pid_output, Servo &servo_fl, Servo &servo_fr, Servo &ser
     double speed_fr = - pid_output[YAW] - pid_output[ROLL] + pid_output[PITCH] + pid_output[THRUST];
     double speed_rl = - pid_output[YAW] + pid_output[ROLL] - pid_output[PITCH] + pid_output[THRUST];
     double speed_rr = pid_output[YAW] - pid_output[ROLL] - pid_output[PITCH] + pid_output[THRUST];
-
-    /*speed_fl = constrain(speed_fl, 0, 360) / 2;
-    speed_fr = constrain(speed_fr, 0, 360) / 2;
-    speed_rl = constrain(speed_rl, 0, 360) / 2;
-    speed_rr = constrain(speed_rr, 0, 360) / 2;*/
 
     speed_fl = constrain(speed_fl, -128, 127);
     speed_fr = constrain(speed_fr, -128, 127);
